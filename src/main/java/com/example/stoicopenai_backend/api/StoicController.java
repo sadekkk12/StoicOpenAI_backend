@@ -3,6 +3,7 @@ package com.example.stoicopenai_backend.api;
 import com.example.stoicopenai_backend.dtos.ChatCompletionRequest;
 import com.example.stoicopenai_backend.dtos.MyResponse;
 import com.example.stoicopenai_backend.service.OpenAiService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -17,6 +18,7 @@ public class StoicController {
             "\n" +
             "if the the prompt given seems to not make sense, ask for another prompt. ";
 
+    //@Autowired
     public StoicController(OpenAiService service) {
         this.service = service;
     }
@@ -24,8 +26,9 @@ public class StoicController {
     @GetMapping
     public MyResponse getQuotes(@RequestParam String about) {
 
-        return service.makeRequest(about,SYSTEM_MESSAGE);
+        return service.makeRequest(about, SYSTEM_MESSAGE);
     }
+}
     // New POST endpoint
     // FOR LATER
   /*  @PostMapping("/chat")
@@ -41,5 +44,5 @@ public class StoicController {
     }
 
    */
-}
+
 
