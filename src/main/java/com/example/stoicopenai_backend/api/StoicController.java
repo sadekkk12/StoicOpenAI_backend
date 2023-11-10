@@ -29,6 +29,13 @@ public class StoicController {
         // Delegate the call to the service layer
         return service.getExplanationForQuote(quote);
     }
+    // Endpoint to generate an image from a quote using DALL·E
+    @PostMapping("/generate-image")
+    public MyResponse generateImage(@RequestBody String quote) {
+        // Delegate the call to the service layer to generate the image
+        return service.generateImageFromQuote(quote);
+    }
+
 }
 
 

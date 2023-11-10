@@ -2,6 +2,7 @@ package com.example.stoicopenai_backend.service;
 
 import com.example.stoicopenai_backend.dtos.ChatCompletionRequest;
 import com.example.stoicopenai_backend.dtos.ChatCompletionResponse;
+import com.example.stoicopenai_backend.dtos.DalleResponse;
 import com.example.stoicopenai_backend.dtos.MyResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
+import java.util.Map;
 
 @Service
 public class OpenAiService {
@@ -115,4 +117,56 @@ public class OpenAiService {
         // Use the existing makeRequest method to send the explanation prompt to OpenAI
         return makeRequest(explanationPrompt, systemMessageForExplanation);
     }
+    // Add a method for generating an image using DALL·E 3
+    // Method to generate an image from a quote using DALL·E 3
+
+    //TODO FIND A BETTER PROMPT
+    //TODO FIND A FITTING SIZE
+    public MyResponse generateImageFromQuote(String quote) {
+        // Endpoint for DALL·E 3 image generation
+        String quoteMeaning = "Create a drawing surrealistic deep drawing, that is yet still simple "
+                + "and easy to understand. The drawing should explain the meaning of this quote "
+                + "\"" + quote + "\""
+                + " and that helps the person seeing it understand it better.";
+
+        String dalleEndpoint = "https://api.openai.com/v1/images/generations";
+
+        // Construct the request body according to DALL·E 3 API specification
+        Map<String, Object> requestBody = Map.of(
+                "model", "dall-e-3",
+                "prompt", quoteMeaning,
+                "n", 1,
+                "size", "1024x1024"
+                // Add other parameters as needed
+        );
+
+        try {
+            // Make the POST request to DALL·E 3 API
+            DalleResponse dalleResponse = client.post()
+                    .uri(new URI(dalleEndpoint))
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(DalleResponse.class)
+                    .block();
+
+            // Assuming the response contains a list of generated images
+            String imageUrl = null;
+            if (dalleResponse != null && !dalleResponse.getData().isEmpty()) {
+                imageUrl = dalleResponse.getData().get(0).getUrl();
+            }
+            return new MyResponse(imageUrl);
+        } catch (WebClientResponseException e) {
+            // Handle exceptions from WebClient
+            logger.error("Error response status code: " + e.getRawStatusCode());
+            logger.error("Error response body: " + e.getResponseBodyAsString());
+            throw new ResponseStatusException(HttpStatus.valueOf(e.getRawStatusCode()), "Error generating image: " + e.getResponseBodyAsString());
+        } catch (Exception e) {
+            // Handle other exceptions
+            logger.error("Exception", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error generating image from DALL·E API.");
+        }
+    }
+
 }
