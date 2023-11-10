@@ -96,4 +96,23 @@ public class OpenAiService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, err);
         }
     }
+
+    public MyResponse getFiveQuotes(String userInput) {
+        String quotesSystemMessage = "You are an assistant that provides stoic quotes to help someone overcome a difficult situation based on the emotion or experience that is provided.\n" +
+                "\n" +
+                "I want you to provide 5 stoic quotes to the given prompt.\n" +
+                "\n" +
+                "If the prompt given seems to not make sense, ask for another prompt.";
+        //TODO make sure it doesnt go to explanation mode if a faulty prompt is given
+
+        // Use the existing makeRequest method to send the quote request to OpenAI
+        return makeRequest(userInput, quotesSystemMessage);
+    }
+    public MyResponse getExplanationForQuote(String quote) {
+        String explanationPrompt = "Explain this quote: \"" + quote + "\"";
+        String systemMessageForExplanation = "You are an assistant that explains the meaning of quotes. Provide a detailed explanation for the quote given.";
+
+        // Use the existing makeRequest method to send the explanation prompt to OpenAI
+        return makeRequest(explanationPrompt, systemMessageForExplanation);
+    }
 }
