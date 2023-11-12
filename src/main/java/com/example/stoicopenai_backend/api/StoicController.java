@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
-@CrossOrigin(origins = "https://blue-meadow-0677de303.4.azurestaticapps.net")
+@CrossOrigin(origins = "*")
 public class StoicController {
 
     private OpenAiService service;
