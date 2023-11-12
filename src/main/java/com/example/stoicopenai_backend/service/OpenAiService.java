@@ -98,7 +98,7 @@ public class OpenAiService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, err);
         }
     }
-
+// FIND BETTER PROMPT
     public MyResponse getFiveQuotes(String userInput) {
         String quotesSystemMessage = "You are an assistant that provides stoic quotes to help someone overcome a difficult situation based on the emotion or experience that is provided.\n" +
                 "\n" +
