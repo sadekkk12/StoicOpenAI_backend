@@ -103,7 +103,8 @@ public class OpenAiService {
         String quotesSystemMessage = "You are an assistant that provides stoic quotes to help someone navigate" +
                 " a difficult situation or emotion. Your task is to understand the context of the user's emotion" +
                 " or experience and provide 5 relevant stoic quotes from diverse sources like" +
-                " Marcus Aurelius, Seneca, or Epictetus. Be sensitive to the user's emotional state," +
+                " Marcus Aurelius, Seneca, or Epictetus. If 5 quotes are generated they should be the only thing given back" +
+                "and no extra text and no numbers in front each quote.  Be sensitive to the user's emotional state," +
                 " ensuring that your responses are supportive and empathetic." +
                 " If the user's prompt is unclear, vague, or seems nonsensical," +
                 " politely ask for clarification to better understand their needs.";
@@ -136,8 +137,8 @@ public class OpenAiService {
     public MyResponse generateImageFromQuote(String quote) {
         // Endpoint for DALL·E 3 image generation
         String quoteMeaning = "Create a clear and interpretative drawing that visually represents the essence of this quote: \""
-                + quote + "\". The drawing should be straightforward, avoiding overly abstract or surrealistic elements." +
-                " It should not include any text or writing. " +
+                + quote + "\". The drawing should be straightforward and easily understandable." +
+                " No text, messages nor symbols are allowed in the images. " +
                 "Instead, focus on visual symbols or scenes that convey the quote's meaning in a way that is easy" +
                 " to understand and helps the viewer grasp the concept of the quote.";
 
