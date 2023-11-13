@@ -31,7 +31,7 @@ public class OpenAiService {
     //https://platform.openai.com/docs/api-reference/completions/create
 
     public final static String URL = "https://api.openai.com/v1/chat/completions";
-    public final static String MODEL = "gpt-3.5-turbo";
+    public final static String MODEL = "gpt-4 turbo";
     public final static double TEMPERATURE = 0.8;
     public final static int MAX_TOKENS = 300;
     public final static double FREQUENCY_PENALTY = 0.0;
@@ -100,11 +100,14 @@ public class OpenAiService {
     }
 // FIND BETTER PROMPT
     public MyResponse getFiveQuotes(String userInput) {
-        String quotesSystemMessage = "You are an assistant that provides stoic quotes to help someone overcome a difficult situation based on the emotion or experience that is provided.\n" +
-                "\n" +
-                "I want you to provide 5 stoic quotes to the given prompt.\n" +
-                "\n" +
-                "If the prompt given seems to not make sense, ask for another prompt.";
+        String quotesSystemMessage = "You are an assistant that provides stoic quotes to help someone navigate" +
+                " a difficult situation or emotion. Your task is to understand the context of the user's emotion" +
+                " or experience and provide 5 relevant stoic quotes from diverse sources like" +
+                " Marcus Aurelius, Seneca, or Epictetus. Be sensitive to the user's emotional state," +
+                " ensuring that your responses are supportive and empathetic." +
+                " If the user's prompt is unclear, vague, or seems nonsensical," +
+                " politely ask for clarification to better understand their needs.";
+
         //TODO make sure it doesnt go to explanation mode if a faulty prompt is given
 
         // Use the existing makeRequest method to send the quote request to OpenAI
@@ -112,7 +115,15 @@ public class OpenAiService {
     }
     public MyResponse getExplanationForQuote(String quote) {
         String explanationPrompt = "Explain this quote: \"" + quote + "\"";
-        String systemMessageForExplanation = "You are an assistant that explains the meaning of quotes. Provide a detailed explanation for the quote given.";
+        String systemMessageForExplanation = "You are an assistant that provides insightful explanations of Stoic quotes."
+               + " When explaining the quote \"" + quote + "\""
+        + ", focus on its universal relevance, illustrating how it can be applied to various life situations. "
+              +  "Offer multiple interpretations, if applicable, to provide a richer understanding."
+               + " Include historical and philosophical context to highlight how the quote reflects Stoic principles."
+               + " Encourage reflection by posing questions that help the user connect with the quote's meaning,"
+               + " and offer practical suggestions for its application in real-life scenarios."
+               + " Ensure your explanation is motivational, clear, and easily understandable, catering to a wide";
+
 
         // Use the existing makeRequest method to send the explanation prompt to OpenAI
         return makeRequest(explanationPrompt, systemMessageForExplanation);
@@ -124,10 +135,11 @@ public class OpenAiService {
     //TODO FIND A FITTING SIZE
     public MyResponse generateImageFromQuote(String quote) {
         // Endpoint for DALL·E 3 image generation
-        String quoteMeaning = "Create a drawing surrealistic deep drawing, that is yet still simple "
-                + "and easy to understand. The drawing should explain the meaning of this quote "
-                + "\"" + quote + "\""
-                + " and that helps the person seeing it understand it better.";
+        String quoteMeaning = "Create a clear and interpretative drawing that visually represents the essence of this quote: \""
+                + quote + "\". The drawing should be straightforward, avoiding overly abstract or surrealistic elements." +
+                " It should not include any text or writing. " +
+                "Instead, focus on visual symbols or scenes that convey the quote's meaning in a way that is easy" +
+                " to understand and helps the viewer grasp the concept of the quote.";
 
         String dalleEndpoint = "https://api.openai.com/v1/images/generations";
 
