@@ -31,7 +31,7 @@ public class OpenAiService {
     //https://platform.openai.com/docs/api-reference/completions/create
 
     public final static String URL = "https://api.openai.com/v1/chat/completions";
-    public final static String MODEL = "gpt-4 turbo";
+    public final static String MODEL = "gpt-4";
     public final static double TEMPERATURE = 0.8;
     public final static int MAX_TOKENS = 300;
     public final static double FREQUENCY_PENALTY = 0.0;
