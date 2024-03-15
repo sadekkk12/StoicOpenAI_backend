@@ -14,7 +14,7 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://blue-meadow-0677de303.4.azurestaticapps.net")
+                        .allowedOrigins("https://blue-meadow-0677de303.4.azurestaticapps.net", "https://stoicopenai.sadekdev.com/", "https://www.stoicopenai.sadekdev.com/", "https://stoicopenai.sadekdev.com")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
