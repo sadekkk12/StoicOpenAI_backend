@@ -1,55 +1,51 @@
 package com.example.stoicopenai_backend.api;
+
 import com.example.stoicopenai_backend.dtos.MyResponse;
 import com.example.stoicopenai_backend.service.OpenAiService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/*
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(StoicController.class)
 class StoicControllerTest {
 
-    @Mock
-    private OpenAiService openAiService;
-
-    @InjectMocks
-    private StoicController stoicController;
-
+    @Autowired
     private MockMvc mockMvc;
 
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(stoicController).build();
-    }
-/*
-    @Test
-    void getQuotes_ReturnsQuotes_WhenGivenValidPrompt() throws Exception {
-        // Arrange
-        String about = "courage";
-        MyResponse mockResponse = new MyResponse();
-        mockResponse.setAnswer("Some Stoic Quote");
-        when(openAiService.makeRequest(about, StoicController)).thenReturn(mockResponse);
+    @MockBean
+    private OpenAiService openAiService;
 
-        // Act & Assert
-        mockMvc.perform(get("/").param("about", about))
+    @Test
+    void getQuotes_ReturnsQuotes_WhenGivenValidInput() throws Exception {
+        String userInput = "courage";
+        MyResponse mockResponse = new MyResponse("Some Stoic Quote");
+        when(openAiService.getFiveQuotes(userInput)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/quotes").param("userInput", userInput))
                 .andExpect(status().isOk())
-                // Use jsonPath to assert the value of the "answer" key
-                .andExpect(jsonPath("$.answer", is("Some Stoic Quote")));
+                .andExpect(content().string(containsString("Some Stoic Quote")));
     }
+
+    @Test
+    void getExplanation_ReturnsExplanation_WhenGivenValidQuote() throws Exception {
+        String quote = "The only way to achieve the impossible is to believe it is possible.";
+        MyResponse mockResponse = new MyResponse("Explanation for the quote");
+        when(openAiService.getExplanationForQuote(quote)).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/explanation").param("quote", quote))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Explanation for the quote")));
+    }
+
+    // You would add a similar test for the /generate-image endpoint
 }
 
 
- */
